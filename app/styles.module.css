@@ -1,0 +1,33 @@
+.nav {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   background: grey;
+   padding: 1rem;
+}
+
+.navLinks {
+   display: none;
+   gap: 1rem;
+   justify-content: center;
+   align-items: center;
+}
+
+.links {
+   color: #fff;
+   text-decoration: none;
+}
+
+.menuBtn {
+   display: flex;
+   flex-direction: row-reverse;
+   gap: 1rem;
+   align-items: center;
+   justify-content: center;
+}
+
+@media screen and (min-width: 768px) {
+   .navLinks {
+      display: flex;
+   }
+}
