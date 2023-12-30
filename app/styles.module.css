@@ -1,3 +1,4 @@
+
 .nav {
    display: flex;
    justify-content: space-between;
@@ -24,6 +25,61 @@
    gap: 1rem;
    align-items: center;
    justify-content: center;
+}
+
+.blur {
+   width: 100%;
+   height: 100vh;
+   background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+   position: absolute;
+   top: 0;
+   bottom: 0;
+
+   /* backdrop-filter: blur(1px); */
+}
+
+.sidebarContainer {
+   width: 70%;
+   background: #262121;
+   position: fixed;
+   top: 0;
+   bottom: 0;
+   height: 100vh;
+}
+
+.closeBtn {
+   position: absolute;
+   right: 1rem;
+   top: 1.5rem;
+   cursor: pointer;
+}
+
+.sidenavLinks {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   margin-top: 5rem;
+   height: 100%;
+}
+
+.sidenavLinks li {
+   list-style: none;
+   font-size: 1.5rem;
+   margin-bottom: 2rem;
+   min-width: 15rem;
+}
+
+.sidenavLinks li:Hover::after {
+   content: '.';
+   font-size: 5rem;
+   color: red;
+   line-height: 0;
 }
 
 @media screen and (min-width: 768px) {
