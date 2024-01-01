@@ -4,8 +4,10 @@ import React from 'react'
 import styles from '@/app/styles.module.css'
 
 import { Fragment, useState } from 'react'
-import { Combobox, Transition } from '@headlessui/react'
+import { Combobox, Transition, Listbox } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { MdClose } from 'react-icons/md'
+import { IoIosSend } from "react-icons/io";
 
 interface PersonProps {
    id: number,
@@ -23,7 +25,8 @@ const people = [
 
 
 const ShoppingList = () => {
-   const [selected, setSelected] = useState(people[0])
+   const [selected, setSelected] = useState('')
+   const [selectedPerson, setSelectedPerson] = useState(people[0])
    const [query, setQuery] = useState('')
 
    const filteredPeople =
@@ -44,18 +47,15 @@ const ShoppingList = () => {
          <div className="mt-1 w-80">
             <Combobox value={selected} onChange={setSelected}>
                <div className="relative mt-1">
-                  <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+                  <div className="flex flex-row relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                      <Combobox.Input
-                        className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 bg-slate-200"
+                        className="flex-1 w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 bg-slate-200"
                         displayValue={(person: PersonProps) => person.name}
                         onChange={(event) => setQuery(event.target.value)}
                      />
-                     <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                        <ChevronUpDownIcon
-                           className="h-5 w-5 text-gray-400"
-                           aria-hidden="true"
-                        />
-                     </Combobox.Button>
+                     <div className='flex flex-[.25] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center'>
+                     <IoIosSend color='white'/>
+                     </div>
                   </div>
                   <Transition
                      as={Fragment}
@@ -104,6 +104,16 @@ const ShoppingList = () => {
                   </Transition>
                </div>
             </Combobox>
+         </div>
+         <div className="mt-2 w-80  border-cyan-700 flex flex-col gap-2 border-spacing-90 overflow-hidden rounded-lg min-h-2">
+            {people.map((person: PersonProps) => (
+               <div className='bg-slate-200  flex flex-column justify-between'>
+                  <div className='p-[.7rem] flex-1 text-gray-900 text-sm'>{person.name}</div>
+                  <div className='flex flex-[.2] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center'>
+                     <MdClose color='white' />
+                  </div>
+               </div>
+            ))}
          </div>
       </section>
    )
