@@ -7,54 +7,69 @@ import { Fragment, useState } from 'react'
 import { Combobox, Transition, Listbox } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { MdClose } from 'react-icons/md'
-import { IoIosSend } from "react-icons/io";
+import { IoSend } from "react-icons/io5";
 
 interface PersonProps {
    id: number,
    name: string,
+   removed: boolean
 }
 
-const people = [
-   { id: 1, name: 'Wade Cooper' },
-   { id: 2, name: 'Arlene Mccoy' },
-   { id: 3, name: 'Devon Webb' },
-   { id: 4, name: 'Tom Cook' },
-   { id: 5, name: 'Tanya Fox' },
-   { id: 6, name: 'Hellen Schmidt' },
+const peopleData = [
+   { id: 1, name: 'Wade Cooper', removed: false },
+   { id: 2, name: 'Arlene Mccoy', removed: false },
+   { id: 3, name: 'Devon Webb', removed: false },
+   { id: 4, name: 'Tom Cook', removed: false },
+   { id: 5, name: 'Tanya Fox', removed: false },
+   { id: 6, name: 'Hellen Schmidt', removed: false },
 ]
 
 
 const ShoppingList = () => {
+   const [people, setPeople]: any = useState(peopleData)
    const [selected, setSelected] = useState('')
    const [selectedPerson, setSelectedPerson] = useState(people[0])
    const [query, setQuery] = useState('')
+   const [clickedItems, setClickedItems] = useState<any>({})
 
    const filteredPeople =
       query === ''
          ? people
-         : people.filter((person) =>
+         : people.filter((person: PersonProps) =>
             person.name
                .toLowerCase()
                .replace(/\s+/g, '')
                .includes(query.toLowerCase().replace(/\s+/g, ''))
          )
 
+   const handleStrikeClick = (itemId: any) => {
+      // Toggle the clicked state for the item
+      setClickedItems((prevClickedItems: any) => ({
+         ...prevClickedItems,
+         [itemId]: !prevClickedItems[itemId],
+      }));
+   }
+
+   const handleAddToList = (item: any) => {
+      setPeople([...people, { id: people.length, name: item }])
+      setQuery('')
+   }
+
    return (
       <section className={styles.shoppingListContainer}>
-         <div>
-            Shopping cart
-         </div>
+
          <div className="mt-1 w-80">
             <Combobox value={selected} onChange={setSelected}>
                <div className="relative mt-1">
                   <div className="flex flex-row relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                      <Combobox.Input
-                        className="flex-1 w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 bg-slate-200"
+                        className="flex-1 placeholder:font-light w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 bg-slate-200"
                         displayValue={(person: PersonProps) => person.name}
                         onChange={(event) => setQuery(event.target.value)}
+                        placeholder='Add to shopping list'
                      />
-                     <div className='flex flex-[.25] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center'>
-                     <IoIosSend color='white'/>
+                     <div className='flex flex-[.25] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center' onClick={() => handleAddToList(query)}>
+                        <IoSend color='white' size='25' />
                      </div>
                   </div>
                   <Transition
@@ -105,11 +120,13 @@ const ShoppingList = () => {
                </div>
             </Combobox>
          </div>
-         <div className="mt-2 w-80  border-cyan-700 flex flex-col gap-2 border-spacing-90 overflow-hidden rounded-lg min-h-2">
+
+         <div className="mt-5 w-80  border-cyan-700 flex flex-col gap-2 border-spacing-90 overflow-hidden rounded-lg min-h-2">
+            <h3>Shopping List</h3>
             {people.map((person: PersonProps) => (
-               <div className='bg-slate-200  flex flex-column justify-between'>
-                  <div className='p-[.7rem] flex-1 text-gray-900 text-sm'>{person.name}</div>
-                  <div className='flex flex-[.2] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center'>
+               <div key={person.id} className='bg-slate-200  flex flex-column justify-between'>
+                  <div className={`p-[.7rem] flex-1 text-gray-900 text-sm ${clickedItems[person.id] && styles.strikeThrough}`}>{person.name}</div>
+                  <div className='flex flex-[.2] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center' onClick={() => handleStrikeClick(person.id)} >
                      <MdClose color='white' />
                   </div>
                </div>

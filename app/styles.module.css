@@ -103,12 +103,17 @@
 /* SHOPPING LIST CONTAINER */
 .shoppingListContainer {
    min-width: 50vw;
-   min-height: 20vh;
+   min-height: 50vh;
+   margin-top: 2rem;
    /* background-color: yellow !important; */
    display: flex;
    flex-direction: column;
    justify-content: center;
    align-items: center;
+}
+
+.strikeThrough {
+   text-decoration: line-through !important;
 }
 
 @media screen and (min-width: 768px) {
