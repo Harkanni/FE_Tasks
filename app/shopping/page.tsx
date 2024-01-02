@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from '@/app/styles.module.css'
 
 import { Fragment, useState } from 'react'
@@ -8,21 +8,20 @@ import { Combobox, Transition, Listbox } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { MdClose } from 'react-icons/md'
 import { IoSend } from "react-icons/io5";
+import { FaRedo } from "react-icons/fa";
 
-interface PersonProps {
-   id: number,
-   name: string,
-   removed: boolean
-}
+// interface PersonProps {
+//    id: number,
+//    name: string,
+//    removed: boolean
+// }
 
-const peopleData = [
-   { id: 1, name: 'Wade Cooper', removed: false },
-   { id: 2, name: 'Arlene Mccoy', removed: false },
-   { id: 3, name: 'Devon Webb', removed: false },
-   { id: 4, name: 'Tom Cook', removed: false },
-   { id: 5, name: 'Tanya Fox', removed: false },
-   { id: 6, name: 'Hellen Schmidt', removed: false },
-]
+// const peopleData = [
+//    { id: 1, name: 'Wade Cooper', },
+//    { id: 2, name: 'Arlene Mccoy', },
+// ]
+
+const peopleData: any = ['Garri',]
 
 
 const ShoppingList = () => {
@@ -32,11 +31,27 @@ const ShoppingList = () => {
    const [query, setQuery] = useState('')
    const [clickedItems, setClickedItems] = useState<any>({})
 
+   useEffect(() => {
+      const fetchData = async () => {
+         try {
+            const response = await fetch('https://api.frontendeval.com/fake/food/mi');
+            const data = await response.json();
+            setPeople([...people, ...data])
+            console.log(data);
+         } catch (error) {
+            console.error('Error fetching data:', error);
+         }
+      };
+
+      fetchData();
+   }, []);
+
+
    const filteredPeople =
       query === ''
          ? people
-         : people.filter((person: PersonProps) =>
-            person.name
+         : people.filter((person: string) =>
+            person
                .toLowerCase()
                .replace(/\s+/g, '')
                .includes(query.toLowerCase().replace(/\s+/g, ''))
@@ -64,7 +79,7 @@ const ShoppingList = () => {
                   <div className="flex flex-row relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                      <Combobox.Input
                         className="flex-1 placeholder:font-light w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 bg-slate-200"
-                        displayValue={(person: PersonProps) => person.name}
+                        displayValue={(person: string) => person}
                         onChange={(event) => setQuery(event.target.value)}
                         placeholder='Add to shopping list'
                      />
@@ -85,9 +100,9 @@ const ShoppingList = () => {
                               Nothing found.
                            </div>
                         ) : (
-                           filteredPeople.map((person) => (
+                           filteredPeople.map((person: string, index: number) => (
                               <Combobox.Option
-                                 key={person.id}
+                                 key={index}
                                  className={({ active }) =>
                                     `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-teal-600 text-white' : 'text-gray-900'
                                     }`
@@ -100,7 +115,7 @@ const ShoppingList = () => {
                                           className={`block truncate ${selected ? 'font-medium' : 'font-normal'
                                              }`}
                                        >
-                                          {person.name}
+                                          {person}
                                        </span>
                                        {selected ? (
                                           <span
@@ -123,11 +138,14 @@ const ShoppingList = () => {
 
          <div className="mt-5 w-80  border-cyan-700 flex flex-col gap-2 border-spacing-90 overflow-hidden rounded-lg min-h-2">
             <h3>Shopping List</h3>
-            {people.map((person: PersonProps) => (
-               <div key={person.id} className='bg-slate-200  flex flex-column justify-between'>
-                  <div className={`p-[.7rem] flex-1 text-gray-900 text-sm ${clickedItems[person.id] && styles.strikeThrough}`}>{person.name}</div>
-                  <div className='flex flex-[.2] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center' onClick={() => handleStrikeClick(person.id)} >
-                     <MdClose color='white' />
+            {people.map((person: string, index: number) => (
+               <div key={index} className='bg-slate-200  flex flex-column justify-between'>
+                  <div className={`p-[.7rem] flex-1 text-gray-900 text-sm ${clickedItems[index] && styles.strikeThroughBG}`}>
+                     <p className={`${clickedItems[index] && styles.strikeThrough}`}>{person}</p>
+                  </div>
+                  <div className={`flex flex-[.2] cursor-pointer hover:opacity-90 bg-black ${clickedItems[index] && 'bg-[#424040fd]'} overflow-hidden justify-center items-center`} onClick={() => handleStrikeClick(index)} >
+                     {!clickedItems[index] ? <MdClose color='white' /> : <FaRedo color='white' />}
+
                   </div>
                </div>
             ))}

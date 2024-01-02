@@ -87,11 +87,12 @@
    display: flex;
    height: 1rem;
    background: grey;
-   position: fixed;
+   /* position: fixed; */
    bottom: 0;
    align-items: center;
    justify-content: center;
    padding: 2rem;
+   margin-top: 2rem;
 }
 
 .social {
@@ -114,7 +115,27 @@
 
 .strikeThrough {
    text-decoration: line-through !important;
+   text-decoration-thickness: 2rem;
+   position: relative;
+   display: inline;
+   background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,1));
+   color: #fff;
 }
+
+.strikeThrough::before {
+   content: "";
+   position: absolute;
+   bottom: 40%;
+   left: 0;
+   right: 0;
+   height: 3px; /* Adjust the thickness as needed */
+   background-color: grey; /* Adjust the color as needed */
+   display: inline !important;
+ }
+
+ .strikeThroughBG {
+   background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,1));
+ }
 
 @media screen and (min-width: 768px) {
    .navLinks {
