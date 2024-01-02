@@ -22,21 +22,23 @@ import { FaRedo } from "react-icons/fa";
 // ]
 
 const peopleData: any = ['Garri',]
+const peopleQuery: any = []
 
 
 const ShoppingList = () => {
    const [people, setPeople]: any = useState(peopleData)
-   const [selected, setSelected] = useState('')
-   const [selectedPerson, setSelectedPerson] = useState(people[0])
+   const [autocompleteList, setAutocompleteList]: any = useState(peopleQuery)
+   // const [selected, setSelected] = useState('')
+   const [selectedPerson, setSelectedPerson] = useState('')
    const [query, setQuery] = useState('')
    const [clickedItems, setClickedItems] = useState<any>({})
 
    useEffect(() => {
       const fetchData = async () => {
          try {
-            const response = await fetch('https://api.frontendeval.com/fake/food/mi');
+            const response = await fetch(`https://api.frontendeval.com/fake/food/mi${query}`);
             const data = await response.json();
-            setPeople([...people, ...data])
+            setAutocompleteList([...autocompleteList, ...data])
             console.log(data);
          } catch (error) {
             console.error('Error fetching data:', error);
@@ -49,13 +51,32 @@ const ShoppingList = () => {
 
    const filteredPeople =
       query === ''
-         ? people
-         : people.filter((person: string) =>
+         ? autocompleteList
+         : autocompleteList.filter((person: string) =>
             person
                .toLowerCase()
                .replace(/\s+/g, '')
                .includes(query.toLowerCase().replace(/\s+/g, ''))
          )
+
+   let timeoutId: any;
+
+   const fetchData = async () => {
+      try {
+         const response = await fetch(`https://api.frontendeval.com/fake/food/${query.toLowerCase()}`);
+         const data = await response.json();
+         setAutocompleteList([...data])
+         console.log(data);
+      } catch (error) {
+         console.error('Error fetching data:', error);
+      }
+   };
+
+   const debouncedFetchData = () => {
+      clearTimeout(timeoutId); // Clear any existing timeout
+      timeoutId = setTimeout(fetchData, 1000); // Set a new timeout for 5 seconds
+   };
+
 
    const handleStrikeClick = (itemId: any) => {
       // Toggle the clicked state for the item
@@ -66,24 +87,31 @@ const ShoppingList = () => {
    }
 
    const handleAddToList = (item: any) => {
-      setPeople([...people, { id: people.length, name: item }])
+      console.log(item)
+      setPeople([...people, item])
       setQuery('')
+   }
+
+   const handleChange = (event: any) => {
+      // debouncedFetchData()
+      fetchData()
+      setQuery(event.target.value)
    }
 
    return (
       <section className={styles.shoppingListContainer}>
 
          <div className="mt-1 w-80">
-            <Combobox value={selected} onChange={setSelected}>
+            <Combobox value={selectedPerson} onChange={setSelectedPerson}>
                <div className="relative mt-1">
                   <div className="flex flex-row relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                      <Combobox.Input
-                        className="flex-1 placeholder:font-light w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 bg-slate-200"
+                        className="capitalize flex-1 placeholder:font-light w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 bg-slate-200"
                         displayValue={(person: string) => person}
-                        onChange={(event) => setQuery(event.target.value)}
+                        onChange={(event) => handleChange(event)}
                         placeholder='Add to shopping list'
                      />
-                     <div className='flex flex-[.25] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center' onClick={() => handleAddToList(query)}>
+                     <div className='flex flex-[.25] cursor-pointer hover:opacity-90 bg-black overflow-hidden justify-center items-center' onClick={() => handleAddToList(selectedPerson)}>
                         <IoSend color='white' size='25' />
                      </div>
                   </div>
@@ -104,10 +132,11 @@ const ShoppingList = () => {
                               <Combobox.Option
                                  key={index}
                                  className={({ active }) =>
-                                    `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-teal-600 text-white' : 'text-gray-900'
+                                    `capitalize relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-teal-600 text-white' : 'text-gray-900'
                                     }`
                                  }
                                  value={person}
+                                 onClick={() => { setQuery(selectedPerson); console.log(selectedPerson) }} // ADDED
                               >
                                  {({ selected, active }) => (
                                     <>
@@ -141,7 +170,7 @@ const ShoppingList = () => {
             {people.map((person: string, index: number) => (
                <div key={index} className='bg-slate-200  flex flex-column justify-between'>
                   <div className={`p-[.7rem] flex-1 text-gray-900 text-sm ${clickedItems[index] && styles.strikeThroughBG}`}>
-                     <p className={`${clickedItems[index] && styles.strikeThrough}`}>{person}</p>
+                     <p className={`capitalize ${clickedItems[index] && styles.strikeThrough}`}>{person}</p>
                   </div>
                   <div className={`flex flex-[.2] cursor-pointer hover:opacity-90 bg-black ${clickedItems[index] && 'bg-[#424040fd]'} overflow-hidden justify-center items-center`} onClick={() => handleStrikeClick(index)} >
                      {!clickedItems[index] ? <MdClose color='white' /> : <FaRedo color='white' />}
