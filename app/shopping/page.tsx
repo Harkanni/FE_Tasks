@@ -34,6 +34,7 @@ const ShoppingList = () => {
    const [query, setQuery] = useState('')
    const [clickedItems, setClickedItems] = useState<any>({})
    const [isFetching, setIsFetching] = useState<boolean>(false)
+   const [count, setCount] = useState(1)
 
    useEffect(() => {
       console.log('called', query)
@@ -187,7 +188,7 @@ const ShoppingList = () => {
                      <p className={`capitalize text-base ${clickedItems[index] && styles.strikeThrough}`}>{person}</p>
                   </div>
                   <div className='flex gap-2'>
-                     <p className='text-black p-2'>10</p>
+                     <p className='text-black p-2'>{count}</p>
                      <button className='px-1.5 text-black border border-slate-700 rounded-full'>+</button>
                      <button className='px-2 text-black border border-slate-700 rounded-full'>-</button>
                   </div>
