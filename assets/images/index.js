@@ -1,4 +1,5 @@
 import logo from './memories-Logo.png';
+import harry from './pexels-taryn-elliott-4488194.jpg';
 
 
 
@@ -6,5 +7,4 @@ import logo from './memories-Logo.png';
 
 
 
-
-export { logo } 
+export { logo, harry } 
