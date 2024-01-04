@@ -1,26 +1,68 @@
-import { harry } from '@/assets/images'
+'use client'
+
+
+import { harry, joshua, vlad, wesley } from '@/assets/images'
 import Image, { StaticImageData } from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
-const imageMap = [harry, harry, harry]
+const imageMap = [harry, joshua, vlad, wesley]
+
+
 const carousel = () => {
+   const [imageID, setImageID] = useState(0)
+   const [image, setImage] = useState(imageMap[0])
+
+   const handleNext = () => {
+      let newImageID = imageID + 1;
+
+      if (newImageID < imageMap.length) {
+         setImage(imageMap[newImageID]);
+         setImageID(newImageID);
+      }
+      // No action is taken if newImageID is less than 0
+
+      else {
+         newImageID = 0;
+         setImage(imageMap[newImageID]);
+         setImageID(newImageID);
+      }
+   };
+
+   const handlePrev = () => {
+      let newImageID = imageID - 1;
+
+      if (newImageID >= 0) {
+         setImage(imageMap[newImageID]);
+         setImageID(newImageID);
+      }
+      // No action is taken if newImageID is less than 0
+
+      else {
+         newImageID = imageMap.length - 1;
+         setImage(imageMap[newImageID]);
+         setImageID(newImageID);
+      }
+   };
+
+
+
    return (
-      <section className='relative flex flex-col justify-center items-center w-full h-[72vh]'>
-         <div className='w-[70%] h-[70%] aspect-video overflow-hidden rounded-lg'>
+      <section className='relative flex flex-col justify-center items-center w-full h-[120vh]'>
+         <div className=' w-[45%] h-[75%] aspect-video overflow-hidden rounded-lg'>
             <Image
-               src={harry}
+               src={image}
                alt='harry'
-               className='h-[100%] w-[100%]'
+               className='h-[100%] w-[100%] '
             />
          </div>
          <div className='flex justify-between w-[85%] absolute'>
-            <FaArrowLeftLong className='cursor-pointer' size={20} />
-            <FaArrowRightLong className='cursor-pointer' size={20} />
+            <FaArrowLeftLong className='cursor-pointer' size={20} onClick={handlePrev} />
+            <FaArrowRightLong className='cursor-pointer' size={20} onClick={handleNext} />
          </div>
-         <div className='flex gap-3 mt-3'>
+         <div className='flex gap-3 mt-3 '>
             {imageMap.map((image: StaticImageData, id: number) => (
-               <div className='bg-gray-50 p-1 rounded-lg' key={id}></div>
+               <div className={`p-1 rounded-lg ${imageID == id ? 'bg-black' : 'bg-gray-50'}`} key={id}></div>
             ))}
          </div>
       </section>
