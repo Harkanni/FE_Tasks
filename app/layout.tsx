@@ -24,10 +24,12 @@ export default function RootLayout({
 }) {
    return (
       <html suppressHydrationWarning lang="en">
-         <body className={inter.className}>
+         <body className={inter.className} style={{ minHeight: '100vh' }}>
             <MainWrapper>
                {children}
             </MainWrapper>
+
+            <Footer />
          </body>
       </html>
    )

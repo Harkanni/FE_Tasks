@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export default function Home() {
    return (
-      <div style={{marginBottom: ''}}>
+      <div style={{marginBottom: '', minHeight: '80vh', padding: '1rem', textAlign: 'justify'}}>
          Hello world
          Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
          Vel neque labore sint repellat aliquam assumenda soluta totam ratione. 
