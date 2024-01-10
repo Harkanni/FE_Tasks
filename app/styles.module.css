@@ -146,6 +146,17 @@
    height: 35%;
 }
 
+
+.visualisationContainer {
+   display: flex;
+   justify-content: center;
+}
+
+.chartBox {
+   height: 80%;
+   width: 80%;
+}
+
 @media screen and (min-width: 768px) {
   .navLinks {
     display: flex;
