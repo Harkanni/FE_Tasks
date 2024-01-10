@@ -12,7 +12,7 @@ interface Props {
 const SidebarNavigation = ({ sidebar, setSidebar }: Props) => {
    return (
       <>
-         <div className={styles.blur}>
+         <div className={styles.blur} onClick={() => setSidebar(!sidebar)}>
             <div className={styles.sidebarContainer}>
                <MdClose size={35} className={styles.closeBtn} color='white' onClick={() => { setSidebar(!sidebar) }} />
 

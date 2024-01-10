@@ -6,6 +6,10 @@ import Image, { StaticImageData } from 'next/image'
 import React, { useState } from 'react'
 
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import styles from '@/app/styles.module.css'
+
+
+
 const imageMap = [harry, joshua, vlad, wesley]
 
 
@@ -48,15 +52,15 @@ const carousel = () => {
 
 
    return (
-      <section className='relative flex flex-col justify-center items-center w-full h-[120vh]'>
-         <div className=' w-[45%] h-[75%] aspect-video overflow-hidden rounded-lg'>
+      <section className={` ${styles.carouselContainer} relative flex flex-col justify-center items-center w-full h-[120vh]`}>
+         <div className={` ${styles.imageContainer} aspect-video overflow-hidden rounded-lg`}>
             <Image
                src={image}
                alt='harry'
                className='h-[100%] w-[100%] '
             />
          </div>
-         <div className='flex justify-between w-[85%] absolute'>
+         <div className={` ${styles.arrowContainer} flex justify-between w-[85%] absolute`}>
             <FaArrowLeftLong className='cursor-pointer' size={20} onClick={handlePrev} />
             <FaArrowRightLong className='cursor-pointer' size={20} onClick={handleNext} />
          </div>
